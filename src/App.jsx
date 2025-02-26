@@ -33,6 +33,9 @@ function App() {
     const Todos = [...Todo, obj];
     setTodos(Todos);
     localStorage.setItem("todos", JSON.stringify(Todos));
+    setTitle("");
+    setDesc("");
+    setStatus("");
     setModal(false);
   };
 
@@ -58,11 +61,11 @@ function App() {
     setTodos(newTodos);
   };
 
-  const handleclick = () => {
+  const handleclick = (e) => {
     if (EditObj) {
       update();
     } else {
-      Add();
+      Add(e);
     }
   };
 
@@ -77,6 +80,27 @@ function App() {
       setTodos(JSON.parse(savedTodos));
     }
   }, []);
+
+  const onDragStart = (e, Todo) => {
+    e.dataTransfer.setData("Todos", JSON.stringify(Todo))
+  }
+
+  const onDragOver = (e) => {
+    e.preventDefault();
+  }
+
+  const onDrop = (e, newstatus) => {
+    e.preventDefault();
+    console.log("Hannan")
+
+    const draggedTodo = JSON.parse(e.dataTransfer.getData("Todos"));
+    const updatedArr = Todo.map((obj) =>
+      JSON.stringify(obj) === JSON.stringify(draggedTodo) ? { ...obj, status: newstatus } : obj
+    );
+
+    localStorage.setItem("todos", JSON.stringify(updatedArr));
+    setTodos(updatedArr);
+  };
 
   return (
     <>
@@ -150,9 +174,11 @@ function App() {
         </div>
       )}
 
-      <Home Todo={Todo} Delete={Delete} Update={updateTask} />
+      <Home Todo={Todo} Delete={Delete} Update={updateTask} onDragStart={onDragStart} onDrop={onDrop} onDragOver={onDragOver} />
     </>
   );
 }
 
 export default App;
+
+

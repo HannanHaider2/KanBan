@@ -1,9 +1,9 @@
 import React from 'react';
 
-function Card({ task, Delete, Update }) {
+function Card({ task, Delete, Update, onDragStart }) {
     return (
         <>
-            <div className="block rounded-lg bg-white p-6 ml-12 mr-11 w-58 mb-2 border border-3-black">
+            <div className="block rounded-lg bg-white p-6 ml-12 mr-11 w-58 mb-2 border border-3-black" draggable="true" onDragStart={(e) => { onDragStart(e, task) }}>
                 <h4 className="mb-2 text-2xl font-medium leading-tight text-black-800">
                     {task.title}
                 </h4>
@@ -21,4 +21,3 @@ function Card({ task, Delete, Update }) {
 }
 
 export default Card;
-
