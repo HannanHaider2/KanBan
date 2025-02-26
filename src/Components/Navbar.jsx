@@ -4,7 +4,7 @@ function Navbar() {
     return (
         <>
             <section>
-                <div className='bg-black h-8 text-white text-2xl text-center'>KanBan</div>
+                <div className='bg-black h-12 text-white text-4xl text-center'>KanBan</div>
             </section>
         </>
     )
