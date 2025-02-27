@@ -6,8 +6,8 @@ import Card from './Card';
 function Home({ Todo, Delete, Update, onDragStart, onDrop, onDragOver }) {
     return (
         <>
-            <div className='flex justify-evenly mt-3 text-2xl font-bold '>
-                <div className='h-auto bg-green-600 w-1/3 text-center pt-4' onDragOver={onDragOver} onDrop={(e) => {
+            <div className='flex justify-evenly mt-3 text-2xl font-bold h-[100vh] '>
+                <div className=' bg-green-600 w-1/3 text-center pt-4' onDragOver={onDragOver} onDrop={(e) => {
                     onDrop(e, "ToDo")
                 }}>
                     <h2 className="mb-4 text-white ">To Do</h2>
