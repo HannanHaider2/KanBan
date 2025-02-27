@@ -12,8 +12,8 @@ function Home({ Todo, Delete, Update, onDragStart, onDrop, onDragOver }) {
                 }}>
                     <h2 className="mb-4 text-white ">To Do</h2>
                     <div className="space-y-4 ">
-                        {Todo.filter((task) => task && task.status === "ToDo").map((task) => (
-                            <Card key={task.title} task={task} Delete={Delete} Update={Update} onDragStart={onDragStart} />
+                        {Todo.filter((task) => task && task.status === "ToDo").map((task, index) => (
+                            <Card key={task.title} task={task} Delete={Delete} Update={Update} onDragStart={onDragStart} index={index} />
                         ))}
                     </div>
                 </div>
@@ -23,8 +23,8 @@ function Home({ Todo, Delete, Update, onDragStart, onDrop, onDragOver }) {
                 }}>
                     <h2 className="mb-4 text-white">In Progress</h2>
                     <div className="space-y-4 ">
-                        {Todo.filter((task) => task && task.status === "In Progress").map((task) => (
-                            <Card key={task.title} task={task} Delete={Delete} Update={Update} onDragStart={onDragStart} />
+                        {Todo.filter((task) => task && task.status === "In Progress").map((task, index) => (
+                            <Card key={task.title} task={task} Delete={Delete} Update={Update} onDragStart={onDragStart} index={index} />
                         ))}
                     </div>
                 </div>
@@ -34,8 +34,8 @@ function Home({ Todo, Delete, Update, onDragStart, onDrop, onDragOver }) {
                 }}>
                     <h2 className="mb-4 text-white">Done</h2>
                     <div className="space-y-4">
-                        {Todo.filter((task) => task && task.status === "Done").map((task) => (
-                            <Card key={task.title} task={task} Delete={Delete} Update={Update} onDragStart={onDragStart} />
+                        {Todo.filter((task) => task && task.status === "Done").map((task, index) => (
+                            <Card key={task.title} task={task} Delete={Delete} Update={Update} onDragStart={onDragStart} index={index} />
                         ))}
                     </div>
                 </div>

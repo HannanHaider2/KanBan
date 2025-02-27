@@ -27,6 +27,13 @@ function App() {
     }
   }, [EditObj]);
 
+  useEffect(() => {
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      setTodos(JSON.parse(savedTodos));
+    }
+  }, []);
+
   const Add = (e) => {
     e.preventDefault();
     const obj = { title, desc, status };
@@ -40,19 +47,14 @@ function App() {
   };
 
   const update = () => {
-    const updateTodos = Todo.map((task) => {
-      if (task === EditObj) {
-        return { title, desc, status };
-      }
-      return task;
-    });
+    const updateTodos = Todo.map((task) =>
+      task === EditObj ? { title, desc, status } : task
+    );
     setTodos(updateTodos);
     localStorage.setItem("todos", JSON.stringify(updateTodos));
     setEditObj("");
     setModal(false);
   };
-
-
 
   const Delete = (objToDelete) => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));
@@ -74,32 +76,31 @@ function App() {
     setModal(true);
   };
 
-  useEffect(() => {
-    const savedTodos = localStorage.getItem("todos");
-    if (savedTodos) {
-      setTodos(JSON.parse(savedTodos));
-    }
-  }, []);
-
-  const onDragStart = (e, Todo) => {
-    e.dataTransfer.setData("Todos", JSON.stringify(Todo))
-  }
+  const onDragStart = (e, task) => {
+    e.dataTransfer.setData("Todos", JSON.stringify(task));
+  };
 
   const onDragOver = (e) => {
     e.preventDefault();
-  }
+  };
 
   const onDrop = (e, newstatus) => {
     e.preventDefault();
-    console.log("Hannan")
 
     const draggedTodo = JSON.parse(e.dataTransfer.getData("Todos"));
-    const updatedArr = Todo.map((obj) =>
-      JSON.stringify(obj) === JSON.stringify(draggedTodo) ? { ...obj, status: newstatus } : obj
-    );
+    const targetCard = e.target.closest(".card");
 
-    localStorage.setItem("todos", JSON.stringify(updatedArr));
-    setTodos(updatedArr);
+    let updatedTodos = [...Todo].filter((task) => JSON.stringify(task) !== JSON.stringify(draggedTodo));
+
+    if (targetCard) {
+      const targetIndex = parseInt(targetCard.dataset.index, 10);
+      updatedTodos.splice(targetIndex, 0, { ...draggedTodo, status: newstatus });
+    } else {
+      updatedTodos.push({ ...draggedTodo, status: newstatus });
+    }
+
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   };
 
   return (
