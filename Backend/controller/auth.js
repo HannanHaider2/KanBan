@@ -3,8 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
+        const { userName, password } = req.body;
+        const user = await User.findOne({ userName });
         if (!user) {
             return res.status(404).json({
                 message: "User Does Not Exist",
@@ -13,10 +13,10 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({
-                message: "Incorrect Email Password",
+                message: "Incorrect userName Password",
             });
         }
-        const accessToken = await jwt.sign({ email: user.email, id: user.id }, 'secret');
+        const accessToken = await jwt.sign({ userName: user.userName, id: user.id }, 'secret');
         return res.status(200).json({
             accessToken: accessToken,
             message: "Login Success",

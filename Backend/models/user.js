@@ -1,12 +1,15 @@
 const { default: mongoose } = require("mongoose")
 
 const userSchema = new mongoose.Schema({
-    name: {
-        type: String
+    userName: {
+        type: String,
+        required: true
     },
-    password: String,
-    
-    email: { type: String }
+
+    password: {
+        type: String,
+        required: true
+    }
 
 })
 const user = mongoose.model("User", userSchema)
