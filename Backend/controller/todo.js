@@ -1,10 +1,11 @@
 const todo = require("../models/todo");
 const createTodo = async (req, res) => {
     try {
-        const { Title, Desc, Status } = req.body;
+        const { title, desc, status } = req.body;
         const userId = req.user.id;
-        const Todo = await new todo({ Title, Desc, Status, userId });
-        Todo.save();
+        const Todo = new todo({ title, desc, status, userId });
+
+        await Todo.save();
         res.status(201).json(Todo);
     }
     catch (err) {
@@ -29,16 +30,17 @@ const getTodo = async (req, res) => {
 }
 const deleteTodo = async (req, res) => {
     try {
-        const userId = req.params.id
-        const Todo = await todo.findById(req.params);
+        const userId = req.user.id;
+        const Todo = await todo.findById(req.params.id);
         if (!Todo) {
-            return res.status(404).json({ message: "Task not found" });
+            return res.status(404).json({ message: "Todo not found" });
         }
-        if (task.userId.toString() !== userId) {
-            return res.status(403).json({ message: "Can't Delete this task" });
+        if (Todo.userId.toString() !== userId) {
+            return res.status(404).json({ message: "Todo Deletion Not Allowed" });
         }
-        await todo.findByIdAndDelete(req.params);
-        res.status(201).json({ message: "Task deleted successfully" });
+
+        await todo.findByIdAndDelete(req.params.id);
+        res.status(201).json({ message: "Todo deleted successfully" });
     }
     catch (err) {
         console.error(err)
@@ -49,17 +51,18 @@ const deleteTodo = async (req, res) => {
 }
 const updateTodo = async (req, res) => {
     try {
-        const { Title, Desc, Status } = req.body;
-        const userId = req.params.id;
-        const Todo = await todo.findById(req.params);
+        const { title, desc, status } = req.body;
+        const userId = req.user.id;
+        const Todo = await todo.findById(req.params.id);
+
 
         if (!Todo) {
-            return res.status(404).json({ message: "Couldn't find Task" });
+            return res.status(404).json({ message: "Couldn't find Todo" });
         }
-        if (todo.userId.toString() !== userId) {
-            return res.status(403).json({ message: "Can't update this task" })
+        if (Todo.userId.toString() !== userId) {
+            return res.status(404).json({ message: "Couldn't update Todo " });
         }
-        const updateTodo = await user.findByIdAndupdate(userId, { Title, Desc, Status }, { new: true })
+        const updateTodo = await user.findByIdAndupdate({ title, desc, status }, { new: true })
         res.status(200).json(updateTodo);
     }
 
