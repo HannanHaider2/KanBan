@@ -1,4 +1,5 @@
 const todo = require("../models/todo");
+const logger = require("../models/logger");
 const createTodo = async (req, res) => {
     try {
         const { title, desc, status } = req.body;
@@ -6,6 +7,15 @@ const createTodo = async (req, res) => {
         const Todo = new todo({ title, desc, status, userId });
 
         await Todo.save();
+
+        const log = new logger({
+            createBy: userId,
+            todoId: Todo.id,
+            oldStatus: null,
+            newStatus: status,
+            action: "create"
+        });
+        await log.save();
         res.status(201).json(Todo);
     }
     catch (err) {
@@ -38,8 +48,17 @@ const deleteTodo = async (req, res) => {
         if (Todo.userId.toString() !== userId) {
             return res.status(404).json({ message: "Todo Deletion Not Allowed" });
         }
-
         await todo.findByIdAndDelete(req.params.id);
+
+        const log = new logger({
+            createBy: userId,
+            todoId: Todo.id,
+            oldStatus: Todo.status,
+            newStatus: null,
+            action: "delete"
+        });
+        await log.save();
+
         res.status(201).json({ message: "Todo deleted successfully" });
     }
     catch (err) {
@@ -62,7 +81,19 @@ const updateTodo = async (req, res) => {
         if (Todo.userId.toString() !== userId) {
             return res.status(404).json({ message: "Couldn't update Todo " });
         }
-        const updateTodo = await user.findByIdAndupdate({ title, desc, status }, { new: true })
+        const updateTodo = await user.findByIdAndupdate({ title, desc, status }, { new: true });
+
+        if (updateTodo) {
+            const log = new logger({
+                createBy: userId,
+                todoId: updateTodo.id,
+                oldStatus: Todo.status,
+                newStatus: status,
+                action: "update"
+            });
+            await log.save();
+        }
+
         res.status(200).json(updateTodo);
     }
 
