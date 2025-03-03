@@ -11,11 +11,11 @@ const logger = new mongoose.Schema({
     },
     oldStatus: {
         type: String,
-        enum: ["ToDo", "In progress", "Done"]
+        enum: ["ToDo", "Inprogress", "Done"]
     },
     newStatus: {
         type: String,
-        enum: ["ToDo", "In progress", "Done"]
+        enum: ["ToDo", "Inprogress", "Done"]
     },
     action: {
         type: String,
