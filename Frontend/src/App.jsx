@@ -121,11 +121,10 @@ function TodoApp() {
         );
 
         const updatedTodo = res.data;
-        const updatedTodos = Todo.map((task) =>
+        setTodos(Todo.map((task) =>
           task.id === draggedTodo.id ? updatedTodo : task
-        );
+        ));
 
-        setTodos(updatedTodos);
       } catch (err) {
         console.error("Error updating task status:", err);
       }
