@@ -30,19 +30,19 @@ function TodoApp() {
       setStatus("");
     }
   }, [EditObj]);
-
+  const fetchTodos = async () => {
+    console.log(token)
+    try {
+      const res = await axios.get("http://localhost:3002/todo/get", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTodos(res.data);
+    } catch (error) {
+      console.error("Can't get todos", error);
+    }
+  };
   useEffect(() => {
-    const fetchTodos = async () => {
-      console.log(token)
-      try {
-        const res = await axios.get("http://localhost:3002/todo/get", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setTodos(res.data);
-      } catch (error) {
-        console.error("Can't get todos", error);
-      }
-    };
+
     if (token) fetchTodos();
   }, [token]);
 
@@ -119,11 +119,13 @@ function TodoApp() {
           { status: newstatus },
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        const response = await fetchTodos()
+        return res.data;
 
-        const updatedTodo = res.data;
-        setTodos(Todo.map((task) =>
-          task.id === draggedTodo.id ? updatedTodo : task
-        ));
+        // const updatedTodo = res.data;
+        // setTodos(Todo.map((task) =>
+        //   task.id === draggedTodo.id ? updatedTodo : task
+        // ));
 
       } catch (err) {
         console.error("Error updating task status:", err);
