@@ -45,9 +45,9 @@ const deleteTodo = async (req, res) => {
         if (!Todo) {
             return res.status(404).json({ message: "Todo not found" });
         }
-        if (Todo.userId.toString() !== userId) {
-            return res.status(404).json({ message: "Todo Deletion Not Allowed" });
-        }
+        // if (Todo.userId.toString() !== userId) {
+        //     return res.status(404).json({ message: "Todo Deletion Not Allowed" });
+        // }
         await todo.findByIdAndDelete(req.params.id);
 
         const log = new logger({
@@ -79,10 +79,10 @@ const updateTodo = async (req, res) => {
         if (!Todo) {
             return res.status(404).json({ message: "Couldn't find Todo" });
         }
-        if (Todo.userId.toString() !== userId) {
-            return res.status(404).json({ message: "Couldn't update Todo " });
-        }
-        const updateTodo = await todo.findByIdAndUpdate(Todo,{ title, desc, status }, { new: true });
+        // if (Todo.userId.toString() !== userId) {
+        //     return res.status(404).json({ message: "Couldn't update Todo " });
+        // }
+        const updateTodo = await todo.findByIdAndUpdate(Todo, { title, desc, status }, { new: true });
 
         if (updateTodo) {
             const log = new logger({

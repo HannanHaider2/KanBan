@@ -21,7 +21,7 @@ const logger = new mongoose.Schema({
         type: String,
         enum: ["create", "update", "delete"]
     },
-    time: {
+    createdAt: {
         type: Date,
         default: Date.now()
     }

@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { TokenContext } from "../context/tokenContext";
 
 function Login() {
     const [UserName, setUserName] = useState("");
     const [Password, setPassword] = useState("");
     const navigate = useNavigate();
+    const { login } = useContext(TokenContext);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -15,7 +17,7 @@ function Login() {
                 password: Password,
             });
 
-            localStorage.setItem("token", res.data.accessToken);
+            login(res.data.accessToken);
             alert("Login successful!");
             navigate("/app");
         } catch (err) {
@@ -64,7 +66,7 @@ function Login() {
                 </form>
 
                 <p className="text-sm text-center text-gray-400 mt-4">
-                    Don't have an account? {" "}
+                    Don't have an account?{" "}
                     <Link to="/signup" className="text-gray-300 font-semibold hover:underline">
                         Sign Up
                     </Link>
