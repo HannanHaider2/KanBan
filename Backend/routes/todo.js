@@ -4,8 +4,8 @@ const { createTodo, getTodo, deleteTodo, updateTodo } = require("../controller/t
 const authorization = require('../middleware/authorization');
 
 router.post('/create', authorization, createTodo)
-router.get('/get', getTodo)
+router.get('/get', authorization, getTodo)
 router.delete('/delete/:id', authorization, deleteTodo)
-router.put('/update/:id', authorization, updateTodo)
+router.patch('/update/:id', authorization, updateTodo)
 
 module.exports = router;

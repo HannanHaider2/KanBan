@@ -16,7 +16,7 @@ const todoSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum: ["ToDo", "In progress", "Done"]
+        enum: ["ToDo", "Inprogress", "Done"]
     }
 })
 const todo = mongoose.model("todo", todoSchema);

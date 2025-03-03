@@ -70,6 +70,7 @@ const deleteTodo = async (req, res) => {
 }
 const updateTodo = async (req, res) => {
     try {
+
         const { title, desc, status } = req.body;
         const userId = req.user.id;
         const Todo = await todo.findById(req.params.id);
@@ -81,7 +82,7 @@ const updateTodo = async (req, res) => {
         if (Todo.userId.toString() !== userId) {
             return res.status(404).json({ message: "Couldn't update Todo " });
         }
-        const updateTodo = await user.findByIdAndupdate({ title, desc, status }, { new: true });
+        const updateTodo = await todo.findByIdAndUpdate(Todo,{ title, desc, status }, { new: true });
 
         if (updateTodo) {
             const log = new logger({
