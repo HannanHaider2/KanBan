@@ -65,6 +65,9 @@ function TodoApp() {
       }
 
       setEditObj(null);
+      setTitle("");
+      setDesc("");
+      setStatus("");
       setModal(false);
     } catch (err) {
       console.error("Task not saved", err);
