@@ -6,6 +6,7 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import axios from "axios";
+import { TokenProvider } from "./context/tokenContext";
 
 function TodoApp() {
   const [modal, setModal] = useState(false);
@@ -31,7 +32,6 @@ function TodoApp() {
     }
   }, [EditObj]);
   const fetchTodos = async () => {
-    console.log(token)
     try {
       const res = await axios.get("http://localhost:3002/todo/get", {
         headers: { Authorization: `Bearer ${token}` },
@@ -61,7 +61,8 @@ function TodoApp() {
         const res = await axios.post("http://localhost:3002/todo/create", todo, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setTodos([...Todo, res.data]);
+        // setTodos([...Todo, res.data]);
+        await fetchTodos();
       }
 
       setEditObj(null);
@@ -191,14 +192,16 @@ function TodoApp() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/app" element={<TodoApp />} />
-      </Routes>
-    </Router>
+    <TokenProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/app" element={<TodoApp />} />
+        </Routes>
+      </Router>
+    </TokenProvider>
   );
 }
 
