@@ -19,6 +19,7 @@ function TodoApp() {
   const [Todo, setTodos] = useState([]);
   const [EditObj, setEditObj] = useState(null);
   const token = localStorage.getItem("token");
+  const { logout } = useContext(TokenContext);
 
   useEffect(() => {
     if (EditObj) {
@@ -135,7 +136,7 @@ function TodoApp() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
     navigate("/login");
   };
 
