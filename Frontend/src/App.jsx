@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Children, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import "./App.css";
 import Navbar from "./Components/Navbar";
@@ -6,7 +6,7 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import axios from "axios";
-import { TokenProvider } from "./context/tokenContext";
+import { TokenContext, TokenProvider } from "./context/tokenContext";
 
 function TodoApp() {
   const [modal, setModal] = useState(false);
@@ -56,12 +56,12 @@ function TodoApp() {
           todo,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        setTodos(Todo.map((o) => (o.id === EditObj.id ? res.data : o)));
+        setTodos(Todo.map((o) => (o === EditObj ? res.data : o)));
       } else {
         const res = await axios.post("http://localhost:3002/todo/create", todo, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // setTodos([...Todo, res.data]);
+        setTodos([...Todo, res.data]);
         await fetchTodos();
       }
 
@@ -198,11 +198,15 @@ function App() {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/app" element={<TodoApp />} />
+          <Route path="/app" element={<ProtectedRoute><TodoApp /></ProtectedRoute>} />
         </Routes>
       </Router>
     </TokenProvider>
   );
+}
+const ProtectedRoute = ({ children }) => {
+  const { token } = useContext(TokenContext);
+  return token ? children : <Navigate to="/login" />;
 }
 
 export default App;
