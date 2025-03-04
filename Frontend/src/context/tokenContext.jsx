@@ -4,12 +4,14 @@ export const TokenContext = createContext();
 
 export function TokenProvider({ children }) {
     const [token, setToken] = useState("");
+    const [load, setLoad] = useState(true);
 
     useEffect(() => {
         const getToken = localStorage.getItem("token");
         if (getToken) {
             setToken(getToken);
         }
+        setLoad(false);
     }, []);
 
     const login = (newToken) => {
@@ -18,8 +20,8 @@ export function TokenProvider({ children }) {
     };
 
     return (
-        <TokenContext.Provider value={{ login, token }}>
-            {children}
+        <TokenContext.Provider value={{ login, token, load }}>
+            {!load && children}
         </TokenContext.Provider>
     );
 }
