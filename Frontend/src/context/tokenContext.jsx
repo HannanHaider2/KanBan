@@ -18,9 +18,12 @@ export function TokenProvider({ children }) {
         localStorage.setItem("token", newToken);
         setToken(newToken);
     };
+    const logout = () => {
+        localStorage.removeItem("token");
+    }
 
     return (
-        <TokenContext.Provider value={{ login, token, load }}>
+        <TokenContext.Provider value={{ logout, login, token, load }}>
             {!load && children}
         </TokenContext.Provider>
     );
