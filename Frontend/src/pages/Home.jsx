@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import { TokenContext } from "../context/tokenContext";
-import { fetchTodos, addTodo, updateTodo, deleteTodo } from "../service/service";
+import { fetchTodos, addTodo, updateTodo, deleteTodo } from "../service/Service";
 
 function Home() {
     const [modal, setModal] = useState(false);
@@ -11,18 +11,18 @@ function Home() {
     const navigate = useNavigate();
 
     const [title, setTitle] = useState("");
-    const [desc, setDesc] = useState("");
+    const [description, setDesc] = useState("");
     const [status, setStatus] = useState("");
     const [Todo, setTodos] = useState([]);
     const [EditObj, setEditObj] = useState(null);
 
-    const token = localStorage.getItem("token");
-    const { logout } = useContext(TokenContext);
+    // const token = localStorage.getItem("token");
+    const { logout,token } = useContext(TokenContext);
 
     useEffect(() => {
         if (EditObj) {
             setTitle(EditObj.title);
-            setDesc(EditObj.desc);
+            setDesc(EditObj.description);
             setStatus(EditObj.status);
         } else {
             setTitle("");
@@ -44,11 +44,10 @@ function Home() {
 
     const addAndupdate = async () => {
         try {
-            const todo = { title, desc, status };
-
+            const todo = { title, description, status };
             if (EditObj) {
                 const response = await updateTodo(EditObj._id, todo, token);
-                setTodos(Todo.map((o) => (o._id === EditObj._id ? response : o)));
+                setTodos(Todo.map((o) => (o === EditObj ? response : o)));
             } else {
                 const response = await addTodo(todo, token);
                 setTodos([...Todo, response]);
@@ -102,7 +101,9 @@ function Home() {
     };
 
     const handleLogout = () => {
+
         logout();
+        alert('logout Successful');
         navigate("/login");
     };
 
@@ -119,7 +120,9 @@ function Home() {
             <button onClick={handleActivityLog} className="bg-green-600 text-white px-5 py-2.5 rounded-lg mt-3 ml-5">
                 Activity Log
             </button>
-            <button className="bg-blue-700 text-white px-5 py-2.5 rounded-lg mt-3 ml-5" onClick={() => { setEditObj(null); toggle(); }}>
+            <button className="bg-blue-700 text-white px-5 py-2.5 rounded-lg mt-3 ml-5"
+                onClick={() => { toggle(); }}>
+                {/* wrong approach  */}
                 Create
             </button>
 
@@ -140,13 +143,13 @@ function Home() {
                             </div>
                             <div>
                                 <label className="block mb-2">Description</label>
-                                <textarea className="border p-2 w-full" value={desc} onChange={e => setDesc(e.target.value)}></textarea>
+                                <textarea className="border p-2 w-full" value={description} onChange={e => setDesc(e.target.value)}></textarea>
                             </div>
                             <div>
                                 <label className="block mb-2">Status</label>
                                 <select className="border p-2 w-full" value={status} onChange={e => setStatus(e.target.value)}>
                                     <option value="">Select Task Status</option>
-                                    <option value="ToDo">ToDo</option>
+                                    <option value="Todo">Todo</option>
                                     <option value="Inprogress">Inprogress</option>
                                     <option value="Done">Done</option>
                                 </select>
@@ -161,10 +164,10 @@ function Home() {
 
             <div className="flex justify-evenly mt-3 text-2xl font-bold h-auto">
 
-                <div className="bg-green-600 w-1/3 text-center pt-4" onDragOver={onDragOver} onDrop={(e) => onDrop(e, "ToDo")}>
+                <div className="bg-green-600 w-1/3 text-center pt-4" onDragOver={onDragOver} onDrop={(e) => onDrop(e, "Todo")}>
                     <h2 className="mb-4 text-white">To Do</h2>
                     <div className="space-y-4">
-                        {Todo.filter((task) => task.status === "ToDo").map((task, index) => (
+                        {Todo.filter((task) => task.status === "Todo").map((task, index) => (
                             <Card key={task._id} task={task} Delete={handleDelete} Update={updateTask} onDragStart={onDragStart} index={index} />
                         ))}
                     </div>

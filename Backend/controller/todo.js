@@ -2,9 +2,9 @@ const todo = require("../models/todo");
 const logger = require("../models/logger");
 const createTodo = async (req, res) => {
     try {
-        const { title, desc, status } = req.body;
+        const { title, description, status } = req.body;
         const userId = req.user.id;
-        const Todo = new todo({ title, desc, status, userId });
+        const Todo = new todo({ title, description, status, userId });
 
         await Todo.save();
 
@@ -13,7 +13,8 @@ const createTodo = async (req, res) => {
             todoId: Todo.id,
             oldStatus: null,
             newStatus: status,
-            action: "create"
+            action: "create",
+            createdAt: new Date
         });
         await log.save();
         res.status(201).json(Todo);
@@ -45,9 +46,6 @@ const deleteTodo = async (req, res) => {
         if (!Todo) {
             return res.status(404).json({ message: "Todo not found" });
         }
-        // if (Todo.userId.toString() !== userId) {
-        //     return res.status(404).json({ message: "Todo Deletion Not Allowed" });
-        // }
         await todo.findByIdAndDelete(req.params.id);
 
         const log = new logger({
@@ -71,18 +69,13 @@ const deleteTodo = async (req, res) => {
 const updateTodo = async (req, res) => {
     try {
 
-        const { title, desc, status } = req.body;
+        const { title, description, status } = req.body;
         const userId = req.user.id;
         const Todo = await todo.findById(req.params.id);
-
-
         if (!Todo) {
             return res.status(404).json({ message: "Couldn't find Todo" });
         }
-        // if (Todo.userId.toString() !== userId) {
-        //     return res.status(404).json({ message: "Couldn't update Todo " });
-        // }
-        const updateTodo = await todo.findByIdAndUpdate(Todo, { title, desc, status }, { new: true });
+        const updateTodo = await todo.findByIdAndUpdate(Todo, { title, description, status }, { new: true });
 
         if (updateTodo) {
             const log = new logger({
@@ -90,7 +83,8 @@ const updateTodo = async (req, res) => {
                 todoId: updateTodo.id,
                 oldStatus: Todo.status,
                 newStatus: status,
-                action: "update"
+                action: "update",
+                updatedAt:new Date
             });
             await log.save();
         }

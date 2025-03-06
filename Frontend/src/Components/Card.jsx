@@ -13,7 +13,7 @@ function Card({ task, Delete, Update, onDragStart, index }) {
             </h4>
             <div>
                 <h3 className="font-bold break-words">Description</h3>
-                <p className="mb-4 text-sm text-black-100 break-words">{task.desc}</p>
+                <p className="mb-4 text-sm text-black-100 break-words">{task.description}</p>
             </div>
             <div>
                 <button className="bg-red-800 text-white p-3 rounded-xl mr-1" onClick={() => Delete(task)}>

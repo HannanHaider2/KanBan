@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const BaseURL = "http://localhost:3002/todo";
+const AuthURL = "http://localhost:3002/auth";
 
 const fetchTodos = async (token) => {
     try {
@@ -48,4 +49,35 @@ const deleteTodo = async (id, token) => {
     }
 };
 
-export { fetchTodos, addTodo, updateTodo, deleteTodo };
+const getLog = async () => {
+    try {
+        const res = await axios.get("http://localhost:3002/logger/get");
+        console.log(res)
+        return res.data.log;
+    }
+    catch (err) {
+        console.log("Error getting Logger", err)
+    }
+}
+
+const loginUser = async (userName, password) => {
+    try {
+        const res = await axios.post(`${AuthURL}/login`, {
+            userName,
+            password,
+        });
+        return res.data;
+    } catch (err) {
+        console.error("Login failed:", err);
+    }
+};
+const signUpUser = async (userName, password, firstName, lastName) => {
+    try {
+        await axios.post(`${AuthURL}/signup`, { userName, password, firstName, lastName });
+    } catch (err) {
+        console.error("Signup failed:", err);
+    }
+};
+
+
+export { fetchTodos, addTodo, updateTodo, deleteTodo, getLog, loginUser, signUpUser };

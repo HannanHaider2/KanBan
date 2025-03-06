@@ -15,7 +15,7 @@ const ActivityLog = ({ logger }) => {
                     <p className="text-lg"><strong className="text-gray-300">Old Status:</strong> <span className="font-semibold text-green-400">{logger.oldStatus}</span></p>
                 )}
 
-                <p className="text-lg"><strong className="text-gray-300">Created By:</strong> <span className="font-semibold text-white">{logger.createBy}</span></p>
+                <p className="text-lg"><strong className="text-gray-300">Created By:</strong> <span className="font-semibold text-white">{logger.createBy.userName}</span></p>
 
                 <p className="text-lg"><strong className="text-gray-300">Time:</strong> <span className="font-semibold text-white">{logger.createdAt}</span></p>
             </div>
