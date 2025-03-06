@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import axios from "axios";
 import ActivityLog from '../Components/ActivityLog';
 import { useNavigate } from "react-router-dom";
+import { getLog } from '../service/Service';
 function LoggerPage() {
     const [logger, setLogger] = useState([]);
     const navigate = useNavigate();
@@ -11,8 +12,8 @@ function LoggerPage() {
     }, []);
     const getLogger = async () => {
         try {
-            const getLog = await axios.get("http://localhost:3002/logger/get");
-            setLogger(getLog.data.Logger);
+            const data = await getLog();
+            setLogger(data);
         }
         catch (err) {
             console.log("Error getting Logger", err)

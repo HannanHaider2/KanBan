@@ -9,14 +9,18 @@ const todoSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    desc: {
+    description: {
         type: String,
         required: true
     },
     status: {
         type: String,
         required: true,
-        enum: ["ToDo", "Inprogress", "Done"]
+        enum: ["Todo", "Inprogress", "Done"]
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
     }
 })
 const todo = mongoose.model("todo", todoSchema);

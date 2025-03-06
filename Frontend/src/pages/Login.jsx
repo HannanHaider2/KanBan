@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TokenContext } from "../context/tokenContext";
-
+import { loginUser } from "../service/Service";
 function Login() {
     const [UserName, setUserName] = useState("");
     const [Password, setPassword] = useState("");
@@ -12,13 +12,9 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:3002/auth/login", {
-                userName: UserName,
-                password: Password,
-            });
-
-            login(res.data.accessToken);
-            alert("Login successful!");
+            const data = await loginUser(UserName, Password);
+            login(data.accessToken);
+            alert("Login successful");
             navigate("/app");
         } catch (err) {
             console.error("Login failed:", err);

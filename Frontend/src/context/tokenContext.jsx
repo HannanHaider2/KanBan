@@ -19,6 +19,7 @@ export function TokenProvider({ children }) {
         setToken(newToken);
     };
     const logout = () => {
+        setToken(null);
         localStorage.removeItem("token");
     }
 

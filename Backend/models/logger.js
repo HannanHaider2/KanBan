@@ -11,17 +11,21 @@ const logger = new mongoose.Schema({
     },
     oldStatus: {
         type: String,
-        enum: ["ToDo", "Inprogress", "Done"]
+        enum: ["Todo", "Inprogress", "Done"]
     },
     newStatus: {
         type: String,
-        enum: ["ToDo", "Inprogress", "Done"]
+        enum: ["Todo", "Inprogress", "Done"]
     },
     action: {
         type: String,
         enum: ["create", "update", "delete"]
     },
     createdAt: {
+        type: Date,
+        default: Date.now()
+    },
+    updatedAt: {
         type: Date,
         default: Date.now()
     }
