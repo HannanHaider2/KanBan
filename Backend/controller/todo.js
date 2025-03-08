@@ -4,20 +4,20 @@ const createTodo = async (req, res) => {
     try {
         const { title, description, status } = req.body;
         const userId = req.user.id;
-        const Todo = new todo({ title, description, status, userId });
+        const task = new todo({ title, description, status, userId });
 
-        await Todo.save();
+        await task.save();
 
         const log = new logger({
             createBy: userId,
-            todoId: Todo.id,
+            todoId: task.id,
             oldStatus: null,
             newStatus: status,
             action: "create",
             createdAt: new Date
         });
         await log.save();
-        res.status(201).json(Todo);
+        res.status(201).json(task);
     }
     catch (err) {
         console.error(err)
@@ -29,8 +29,8 @@ const createTodo = async (req, res) => {
 }
 const getTodo = async (req, res) => {
     try {
-        const Todo = await todo.find().populate('userId');
-        res.send(Todo);
+        const task = await todo.find().populate('userId');
+        res.send(task);
     }
     catch (err) {
         console.error(err)
@@ -42,16 +42,16 @@ const getTodo = async (req, res) => {
 const deleteTodo = async (req, res) => {
     try {
         const userId = req.user.id;
-        const Todo = await todo.findById(req.params.id);
-        if (!Todo) {
+        const task = await todo.findById(req.params.id);
+        if (!task) {
             return res.status(404).json({ message: "Todo not found" });
         }
         await todo.findByIdAndDelete(req.params.id);
 
         const log = new logger({
             createBy: userId,
-            todoId: Todo.id,
-            oldStatus: Todo.status,
+            todoId: task.id,
+            oldStatus: task.status,
             newStatus: null,
             action: "delete"
         });
@@ -71,17 +71,17 @@ const updateTodo = async (req, res) => {
 
         const { title, description, status } = req.body;
         const userId = req.user.id;
-        const Todo = await todo.findById(req.params.id);
-        if (!Todo) {
+        const task = await todo.findById(req.params.id);
+        if (!task) {
             return res.status(404).json({ message: "Couldn't find Todo" });
         }
-        const updateTodo = await todo.findByIdAndUpdate(Todo, { title, description, status }, { new: true });
+        const updateTodo = await todo.findByIdAndUpdate(task, { title, description, status }, { new: true });
 
         if (updateTodo) {
             const log = new logger({
                 createBy: userId,
                 todoId: updateTodo.id,
-                oldStatus: Todo.status,
+                oldStatus: task.status,
                 newStatus: status,
                 action: "update",
                 updatedAt:new Date

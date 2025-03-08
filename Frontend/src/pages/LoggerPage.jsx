@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from "react"
 import axios from "axios";
-import ActivityLog from '../Components/ActivityLog';
+import ActivityLog from '../components/ActivityLog';
 import { useNavigate } from "react-router-dom";
 import { getLog } from '../service/Service';
 function LoggerPage() {
